@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    async function main() {
+      const peopleResponse = await fetch('/api/people');
+      const people = await peopleResponse.json();
+      const rows = people.map(person => {
+        const name = person.name;
+        const lastName = person.last_name;
+        const oib = person.oib;
+        return `
+        <tr>
+        <td>${name}</td>
+        <td>${lastName}</td>
+        <td>${oib}</td>
+        </tr>`;
+      })
+      const tableContent = rows.join('\n');
+      const peopleElement = document.getElementById('people');
+      peopleElement.innerHTML += tableContent;
+    }
+    main().catch(console.log);
+  </script>
+</head>
+<body>
+
+<h2>People Table</h2>
+
+<table id="people">
+  <tr>
+    <th>Name</th>
+    <th>Last name</th>
+    <th>OIB</th>
+  </tr>
+</table><br>
+<a href="/people/new">Add new person</a>
+</body>
+</html>
+

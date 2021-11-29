@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "John",
+    "last_name": "Smith",
+    "oib": "567877545"
+  },
+  {
+    "id": 2,
+    "name": "Jane",
+    "last_name": "Doe",
+    "oib": "12345678"
+  },
+  {
+    "id": 3,
+    "name": "Mary",
+    "last_name": "Pop",
+    "oib": "9876564"
+  },
+  {
+    "id": 4,
+    "name": "Josephine",
+    "last_name": "Cloud",
+    "oib": "987654"
+  }
+]
