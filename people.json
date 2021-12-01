@@ -2,8 +2,8 @@
   {
     "id": 1,
     "name": "John",
-    "last_name": "Smith",
-    "oib": "567877545"
+    "last_name": "Doe",
+    "oib": "234566"
   },
   {
     "id": 2,
@@ -13,14 +13,14 @@
   },
   {
     "id": 3,
-    "name": "Mary",
-    "last_name": "Pop",
-    "oib": "9876564"
-  },
-  {
-    "id": 4,
     "name": "Josephine",
     "last_name": "Cloud",
     "oib": "987654"
+  },
+  {
+    "id": 4,
+    "name": "Frank",
+    "last_name": "Stanley",
+    "oib": "88876"
   }
 ]
