@@ -41,6 +41,37 @@ app.get('/api/people/delete', (req, res) =>{
   res.send("Successfully deleted record!");
 
 })
+app.get('/api/people/edit', (req, res) =>{
+  const id = parseInt(req.query.id);
+  const name = req.query.name;
+  const lastName = req.query.last_name;
+  const oib = req.query.oib;
+  const peopleString = fs.readFileSync('people.json', 'utf8');
+  const people = JSON.parse(peopleString);
+
+  const index = people.findIndex(person => person.id === id);
+  people[index].name = name;
+  people[index].last_name = lastName;
+  people[index].oib = oib;
+
+  const newPeople = JSON.stringify(people, null, 2);
+  fs.writeFileSync('people.json',newPeople);
+  res.send("Successfully edited the record.");
+})
+app.get('/api/people/:id', (req, res) =>{
+  const id = parseInt(req.params.id);
+  function isRequestedPerson(person){
+    return person.id === id;
+  }
+  const peopleString = fs.readFileSync('people.json', 'utf8');
+  const people = JSON.parse(peopleString);
+  const person = people.find(isRequestedPerson);
+  res.send(person);
+})
+app.get('/people/edit', (req, res) => {
+  const formHTML = fs.readFileSync('form.html', 'utf8');
+  res.send(formHTML);
+})
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })

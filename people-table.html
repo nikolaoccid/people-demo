@@ -15,7 +15,10 @@
         <td>${name}</td>
         <td>${lastName}</td>
         <td>${oib}</td>
-        <td><button type="button" onclick="handleDelete(${id});">Delete!</button></td>
+        <td>
+          <button onclick="handleDelete(${id});">Delete</button>
+          <button onclick="handleEdit(${id});">Edit</button>
+        </td>
         </tr>`;
       })
       const tableContent = rows.join('\n');
@@ -25,6 +28,9 @@
     async function handleDelete(id){
       await fetch(`/api/people/delete?id=${id}`);
       renderTable();
+    }
+    function handleEdit(id){
+      window.location.href = `/people/edit?id=${id}`;
     }
     renderTable().catch(console.log);
   </script>
