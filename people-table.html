@@ -2,10 +2,11 @@
 <html>
 <head>
   <script>
-    async function main() {
+    async function renderTable() {
       const peopleResponse = await fetch('/api/people');
       const people = await peopleResponse.json();
       const rows = people.map(person => {
+        const id = person.id;
         const name = person.name;
         const lastName = person.last_name;
         const oib = person.oib;
@@ -14,25 +15,31 @@
         <td>${name}</td>
         <td>${lastName}</td>
         <td>${oib}</td>
+        <td><button type="button" onclick="handleDelete(${id});">Delete!</button></td>
         </tr>`;
       })
       const tableContent = rows.join('\n');
-      const peopleElement = document.getElementById('people');
-      peopleElement.innerHTML += tableContent;
+      const peopleElement = document.getElementById('people-content');
+      peopleElement.innerHTML = tableContent;
     }
-    main().catch(console.log);
+    async function handleDelete(id){
+      await fetch(`/api/people/delete?id=${id}`);
+      renderTable();
+    }
+    renderTable().catch(console.log);
   </script>
 </head>
 <body>
 
 <h2>People Table</h2>
 
-<table id="people">
+<table>
   <tr>
     <th>Name</th>
     <th>Last name</th>
     <th>OIB</th>
   </tr>
+  <tbody id="people-content"></tbody>
 </table><br>
 <a href="/people/new">Add new person</a>
 </body>
