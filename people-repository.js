@@ -28,7 +28,7 @@ class PeopleRepository {
     people[index].oib = oib;
     io.writeJSON('people.json', people);
   }
-  getPersonById(id){
+  getById(id){
     const people = io.readJSON('people.json');
     return people.find(person => person.id === id);
   }

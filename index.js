@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3000;
-const io = require('./json-io')
 const {PeopleRepository} = require('./people-repository');
 
 
@@ -36,7 +35,7 @@ app.get('/api/people/edit', (req, res) =>{
   res.send("Successfully edited the record.");
 })
 app.get('/api/people/:id', (req, res) =>{
-  res.send(repo.getPersonById(parseInt(req.params.id)));
+  res.send(repo.getById(parseInt(req.params.id)));
 })
 app.get('/people/edit', (req, res) => {
   res.send(fs.readFileSync('form.html', 'utf8'));
