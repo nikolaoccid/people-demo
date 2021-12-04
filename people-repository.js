@@ -7,8 +7,10 @@ class PeopleRepository {
   create(person){
     const people = io.readJSON('people.json');
     const id = people.slice(-1)[0].id + 1;
-    people.push({id: id, name: person.name, last_name: person.last_name, oib: person.oib});
+    const newPerson = {id: id, name: person.name, last_name: person.last_name, oib: person.oib};
+    people.push(newPerson);
     io.writeJSON('people.json', people);
+    return newPerson;
   }
   delete(id){
     const parsedId = id;
@@ -27,6 +29,7 @@ class PeopleRepository {
     people[index].last_name = lastName;
     people[index].oib = oib;
     io.writeJSON('people.json', people);
+    return people[index];
   }
   getById(id){
     const people = io.readJSON('people.json');

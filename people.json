@@ -1,9 +1,9 @@
 [
   {
     "id": 1,
-    "name": "John",
-    "last_name": "Doe",
-    "oib": "12345"
+    "name": "John the Second",
+    "last_name": "Doe-st",
+    "oib": "12344"
   },
   {
     "id": 2,
@@ -22,5 +22,17 @@
     "name": "Frank",
     "last_name": "Stanley",
     "oib": "8876"
+  },
+  {
+    "id": 5,
+    "name": "Anthony",
+    "last_name": "Dolittle",
+    "oib": "554433"
+  },
+  {
+    "id": 6,
+    "name": "Anthony",
+    "last_name": "Dolittle",
+    "oib": "554433"
   }
 ]
