@@ -6,18 +6,13 @@ const {PeopleRepository} = require('./people-repository');
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
+app.use(express.static('public', {extensions: ['html']}));
 const repo = new PeopleRepository();
 
 app.get('/', (req, res) => {
   res.redirect('/people');
 })
-app.get('/favicon.ico', (req, res) => {
-  res.send(fs.readFileSync('./favicon.png'));
-})
 
-app.get('/people', (req, res) =>{
-  res.send(fs.readFileSync('people-table.html', 'utf8'));
-})
 app.get('/people/new', (req, res) =>{
   res.send(fs.readFileSync('form.html', 'utf-8'));
 })
