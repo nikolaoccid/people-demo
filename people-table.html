@@ -3,7 +3,7 @@
 <head>
   <script>
     async function renderTable() {
-      const peopleResponse = await fetch('/api/people');
+      const peopleResponse = await fetch('/api/people', {method: 'GET'});
       const people = await peopleResponse.json();
       const rows = people.map(person => {
         const id = person.id;
@@ -26,8 +26,8 @@
       peopleElement.innerHTML = tableContent;
     }
     async function handleDelete(id){
-      await fetch(`/api/people/delete?id=${id}`);
-      renderTable();
+      await fetch(`/api/people/${id}`, {method: 'DELETE'});
+      await renderTable();
     }
     function handleEdit(id){
       window.location.href = `/people/edit?id=${id}`;

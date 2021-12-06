@@ -28,17 +28,15 @@
       const urlString = window.location.href;
       const url = new URL(urlString);
       const id = url.searchParams.get('id');
-      const name = form.name.value;
-      const lastName = form.last_name.value;
-      const oib = form.oib.value;
-      await fetch(`/api/people/edit?id=${id}&name=${name}&last_name=${lastName}&oib=${oib}`);
+      const person = {name:form.name.value, last_name:form.last_name.value, oib:form.oib.value};
+      await fetch(`/api/people/${id}`, {method: 'PUT', headers: { 'Content-Type': 'application/json'},
+        body:JSON.stringify(person)});
       window.location.href = '/';
     }
     async function handleSubmit(form){
-      const name = form.name.value;
-      const lastName = form.last_name.value;
-      const oib = form.oib.value;
-      await fetch(`/api/people/new?name=${name}&last_name=${lastName}&oib=${oib}`);
+      const person = {name:form.name.value, last_name:form.last_name.value, oib:form.oib.value};
+      await fetch(`/api/people`, {method: 'POST', headers: { 'Content-Type': 'application/json'},
+        body:JSON.stringify(person)});
       window.location.href = '/';
     }
     renderForm().catch(console.log);
@@ -46,7 +44,7 @@
 </head>
 <body>
 
-<h2>People input form</h2>
+<h2>People form</h2>
 <div id="form-wrap">
 <form onsubmit="handleSubmit(this); return false;">
   <p>Name:</p>
