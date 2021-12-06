@@ -9,5 +9,6 @@ function writeJSON(filename, data){
   const serializedData = JSON.stringify(data, null, 2);
   fs.writeFileSync(filename, serializedData);
 }
+
 exports.readJSON = readJSON;
 exports.writeJSON = writeJSON;

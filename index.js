@@ -5,12 +5,14 @@ const port = process.env.PORT || 3000;
 const {PeopleRepository} = require('./people-repository');
 const bodyParser = require('body-parser');
 
-
 app.use(bodyParser.json());
 const repo = new PeopleRepository();
 
 app.get('/', (req, res) => {
   res.redirect('/people');
+})
+app.get('/favicon.ico', (req, res) => {
+  res.send(fs.readFileSync('./favicon.png'));
 })
 
 app.get('/people', (req, res) =>{

@@ -1,11 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Anthony",
-    "last_name": "Dolittle",
-    "oib": "5544332"
-  },
-  {
     "id": 2,
     "name": "Jane",
     "last_name": "Doe",
@@ -27,6 +21,6 @@
     "id": 5,
     "name": "Anthony",
     "last_name": "Dolittle",
-    "oib": "554433"
+    "oib": "5544"
   }
 ]
