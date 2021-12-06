@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>People app</title>
+  <meta name="description" content="Demo full stack application to showcase usage of full stack technologies"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Nikola Occidentale">
   <script>
     async function renderTable() {
       const peopleResponse = await fetch('/api/people', {method: 'GET'});
@@ -34,6 +38,26 @@
     }
     renderTable().catch(console.log);
   </script>
+  <style>
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      /* Zebra striping */
+      tr:nth-of-type(odd) {
+          background: #eee;
+      }
+      th {
+          background: #333;
+          color: white;
+          font-weight: bold;
+      }
+      td, th {
+          padding: 6px;
+          border: 1px solid #ccc;
+          text-align: left;
+      }
+  </style>
 </head>
 <body>
 
@@ -44,6 +68,7 @@
     <th>Name</th>
     <th>Last name</th>
     <th>OIB</th>
+    <th>Action</th>
   </tr>
   <tbody id="people-content"></tbody>
 </table><br>
