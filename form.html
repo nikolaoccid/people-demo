@@ -2,26 +2,32 @@
 <html>
 <head>
   <script>
-    async function renderForm(){
+    function renderForm(person) {
+      const handler = person ? 'handleEdit(this)':'handleSubmit(this)';
+      return `
+        <form onsubmit="${handler}; return false;">
+          <p>Name:</p>
+          <input type="text" name="name" required value="${person ? person.name : ''}">
+          <p>Last name:</p>
+          <input type="text" name="last_name" required value="${person ? person.last_name: ''}">
+          <p>OIB:</p>
+          <input type="text" name="oib" required value="${person ? person.oib : ''}"><br><br>
+          <input type="submit" value="Submit">
+        </form>
+
+        `
+    }
+    async function initialize(){
       const inEditMode = window.location.href.includes('/people/edit')
+      const wrapperElement = document.getElementById('form-wrap');
       if (inEditMode) {
         const urlString = window.location.href;
         const url = new URL(urlString);
         const id = url.searchParams.get('id');
         const person = await (await fetch(`/api/people/${id}`)).json();
-        const editForm = `
-        <form onsubmit="handleEdit(this); return false;">
-          <p>Name:</p>
-          <input type="text" name="name" required value="${person.name}">
-          <p>Last name:</p>
-          <input type="text" name="last_name" required value="${person.last_name}">
-          <p>OIB:</p>
-          <input type="text" name="oib" required value="${person.oib}"><br><br>
-          <input type="submit" value="Submit">
-        </form>
-
-        `
-        document.getElementById('form-wrap').innerHTML = editForm;
+        wrapperElement.innerHTML = renderForm(person);
+      } else {
+        wrapperElement.innerHTML = renderForm();
       }
     }
     async function handleEdit(form){
@@ -39,22 +45,16 @@
         body:JSON.stringify(person)});
       window.location.href = '/';
     }
-    renderForm().catch(console.log);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initialize().catch(console.log);
+    })
   </script>
 </head>
 <body>
 
 <h2>People form</h2>
 <div id="form-wrap">
-<form onsubmit="handleSubmit(this); return false;">
-  <p>Name:</p>
-  <input type="text" name="name" required>
-  <p>Last name:</p>
-  <input type="text" name="last_name" required>
-  <p>OIB:</p>
-  <input type="text" name="oib" required><br><br>
-  <input type="submit" value="Submit">
-</form>
 </div>
 <br>
 <a href="/people">See all the people in the DB.</a>
