@@ -34,7 +34,7 @@
       await renderTable();
     }
     function handleEdit(id){
-      window.location.href = `/people/edit?id=${id}`;
+      window.location.href = `/people/${id}/edit`;
     }
     renderTable().catch(console.log);
   </script>

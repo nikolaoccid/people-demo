@@ -21,12 +21,10 @@
         `
     }
     async function initialize(){
-      const inEditMode = window.location.href.includes('/people/edit')
+      const inEditMode = window.location.href.includes('/edit')
       const wrapperElement = document.getElementById('form-wrap');
       if (inEditMode) {
-        const urlString = window.location.href;
-        const url = new URL(urlString);
-        const id = url.searchParams.get('id');
+        const id = window.location.href.split('/').reverse()[1];
         const person = await (await fetch(`/api/people/${id}`)).json();
         wrapperElement.innerHTML = renderForm(person);
       } else {

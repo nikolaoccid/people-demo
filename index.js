@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 app.get('/people/new', (req, res) =>{
   res.send(fs.readFileSync('form.html', 'utf-8'));
 })
-app.get('/people/edit', (req, res) => {
+app.get('/people/:id/edit', (req, res) => {
   res.send(fs.readFileSync('form.html', 'utf8'));
 })
 
