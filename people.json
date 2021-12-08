@@ -30,11 +30,5 @@
     "oib": "7654",
     "username": "anthony",
     "password": "password444"
-  },
-  {
-    "id": 5,
-    "name": "a",
-    "last_name": "b",
-    "oib": "1"
   }
 ]

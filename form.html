@@ -32,9 +32,7 @@
       }
     }
     async function handleEdit(form){
-      const urlString = window.location.href;
-      const url = new URL(urlString);
-      const id = url.searchParams.get('id');
+      const id = window.location.href.split('/').reverse()[1];
       const person = {name:form.name.value, last_name:form.last_name.value, oib:form.oib.value};
       await fetch(`/api/people/${id}`, {method: 'PUT', headers: { 'Content-Type': 'application/json'},
         body:JSON.stringify(person)});
