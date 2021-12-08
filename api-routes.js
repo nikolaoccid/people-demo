@@ -1,5 +1,6 @@
 const express = require('express');
 const {PeopleRepository} = require('./people-repository');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 const repo = new PeopleRepository();
@@ -27,6 +28,20 @@ router.delete('/people/:id', (req, res) => {
 router.put('/people/:id', (req, res) => {
   const person = {id:parseInt(req.params.id), name:req.body.name, last_name:req.body.last_name, oib:req.body.oib};
   res.send(repo.edit(person));
+})
+router.post('/login', (req, res) =>{
+  const username = req.body.username;
+  const password = req.body.password;
+  const people = repo.getAll();
+  const person = people.find(user =>user.username === username);
+  if (person?.password === password){
+    //correct login
+    const token = {user_id: person.id};
+    res.send({token:jwt.sign(token, 'majkabozjabistricka')});
+  } else {
+    res.status(401);
+    res.send({error:'Invalid username or password.'});
+  }
 })
 exports.router = router;
 

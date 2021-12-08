@@ -1,26 +1,40 @@
 [
   {
-    "id": 2,
+    "id": 1,
     "name": "Jane",
     "last_name": "Doe",
-    "oib": "4568"
+    "oib": "1234",
+    "username": "janedoe",
+    "password": "password123"
+  },
+  {
+    "id": 2,
+    "name": "Josephine",
+    "last_name": "Cloud",
+    "oib": "9876",
+    "username": "josephine",
+    "password": "password321"
   },
   {
     "id": 3,
-    "name": "Josephine",
-    "last_name": "Cloud",
-    "oib": "9976"
+    "name": "Frank",
+    "last_name": "Stanley",
+    "oib": "8765",
+    "username": "frank",
+    "password": "password423"
   },
   {
     "id": 4,
-    "name": "Frank",
-    "last_name": "Stanley",
-    "oib": "8876"
+    "name": "Anthony",
+    "last_name": "Doe",
+    "oib": "7654",
+    "username": "anthony",
+    "password": "password444"
   },
   {
     "id": 5,
-    "name": "Anthony",
-    "last_name": "Dolittle",
-    "oib": "5544"
+    "name": "a",
+    "last_name": "b",
+    "oib": "1"
   }
 ]
