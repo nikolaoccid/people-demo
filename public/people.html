@@ -20,7 +20,7 @@
         <td>${name}</td>
         <td>${lastName}</td>
         <td>${oib}</td>
-        <td>
+        <td class="table-action">
           <button class="action-button" onclick="handleDelete(${id});">Delete</button>
           <button class="action-button" onclick="handleEdit(${id});">Edit</button>
         </td>
@@ -55,6 +55,10 @@
        return false;
      }
     }
+    function logOut(){
+      localStorage.clear();
+      window.location.href='/';
+    }
     renderTable().catch(console.log);
   </script>
   <style>
@@ -76,6 +80,20 @@
           border: 1px solid #ccc;
           text-align: left;
       }
+      button {
+          padding: 4px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          resize: vertical;
+          width: 30%;
+      }
+      .table-action{
+          display: flex;
+          justify-content: center;
+      }
+      #logout{
+          width: auto;
+      }
   </style>
 </head>
 <body>
@@ -92,7 +110,8 @@
   </tr>
   <tbody id="people-content"></tbody>
 </table><br>
-<a class="action-button" href="/people/new">Add new person</a>
+<a class="action-button" href="/people/new">Add new person</a><br>
+<button id="logout" class="action-button" onclick="logOut()">Logout</button>
 </body>
 </html>
 
