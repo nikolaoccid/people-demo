@@ -88,18 +88,14 @@
       };
       const response = await fetch(`/api/login`, fetchArgs);
       const responseData = await response.json();
-      console.log('response data', responseData);
+      //console.log('response data', responseData);
       if (responseData.token){
         localStorage.setItem('token', responseData.token);
+        window.location.href = '/';
       } else{
         console.log("Invalid token")
+        document.getElementById('invalid_message').style.display = "flex";
       }
-
-      //localStorage.setItem('token', response);
-      /*if (localStorage.getItem('token')){
-        window.location.href='/'} else{
-       document.getElementById('invalid_message').style.display = "inline";
-      }*/
     }
   </script>
 </head>
@@ -116,7 +112,7 @@
 
     <label for="psw"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="psw" required>
-    <p id="invalid_message" style="display: none;">Invalid username or password, please try againg</p>
+    <p id="invalid_message" style="display: none;"> Invalid username or password, please try again</p>
     <button type="submit">Login</button>
   </div>
 </form>

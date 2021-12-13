@@ -43,5 +43,17 @@ router.post('/login', (req, res) =>{
     res.send({error:'Invalid username or password.'});
   }
 })
+router.get('/me', (req, res) =>{
+  const token = req.headers.authorization;
+  try {
+    const decoded = jwt.verify(token, 'majkabozjabistricka');
+    const user = repo.getById(decoded.user_id);
+    delete user.password;
+    res.send(user);
+  } catch {
+    res.status(401);
+    res.send({error: 'Invalid token.'});
+  }
+})
 exports.router = router;
 

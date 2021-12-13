@@ -7,6 +7,7 @@
   <meta name="author" content="Nikola Occidentale">
   <script>
     async function renderTable() {
+      const loggedIn = isLoggedIn();
       const peopleResponse = await fetch('/api/people', {method: 'GET'});
       const people = await peopleResponse.json();
       const rows = people.map(person => {
@@ -20,14 +21,25 @@
         <td>${lastName}</td>
         <td>${oib}</td>
         <td>
-          <button onclick="handleDelete(${id});">Delete</button>
-          <button onclick="handleEdit(${id});">Edit</button>
+          <button class="action-button" onclick="handleDelete(${id});">Delete</button>
+          <button class="action-button" onclick="handleEdit(${id});">Edit</button>
         </td>
         </tr>`;
       })
       const tableContent = rows.join('\n');
       const peopleElement = document.getElementById('people-content');
       peopleElement.innerHTML = tableContent;
+      if (loggedIn){
+        hideElements('login-section');
+      }else {
+        hideElements('action-button');
+      }
+    }
+    function hideElements(className){
+      const elements = document.getElementsByClassName(className);
+      for (let element of elements) {
+        element.setAttribute('hidden', 'hidden');
+      }
     }
     async function handleDelete(id){
       await fetch(`/api/people/${id}`, {method: 'DELETE'});
@@ -35,6 +47,13 @@
     }
     function handleEdit(id){
       window.location.href = `/people/${id}/edit`;
+    }
+    function isLoggedIn(){
+     if (localStorage.getItem('token')){
+       return true;
+     } else{
+       return false;
+     }
     }
     renderTable().catch(console.log);
   </script>
@@ -72,7 +91,9 @@
   </tr>
   <tbody id="people-content"></tbody>
 </table><br>
-<a href="/people/new">Add new person</a>
+<a class="action-button" href="/people/new">Add new person</a>
+<p class="login-section">To enable CRUD functionality please login in (username:demo, password:demo)</p>
+<a class="login-section" href="/login">Login</a>
 </body>
 </html>
 
