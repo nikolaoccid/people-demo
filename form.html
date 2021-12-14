@@ -1,126 +1,151 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>People app</title>
-  <meta name="description" content="Demo full stack application to showcase usage of full stack technologies"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="Nikola Occidentale">
-  <script>
-    function renderForm(person) {
-      const handler = person ? 'handleEdit(this)':'handleSubmit(this)';
-      return `
+  <head>
+    <title>People app</title>
+    <meta
+      name="description"
+      content="Demo full stack application to showcase usage of full stack technologies"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Nikola Occidentale" />
+    <script>
+      function renderForm(person) {
+        const handler = person ? 'handleEdit(this)' : 'handleSubmit(this)';
+        return `
         <form onsubmit="${handler}; return false;">
           <p>Name:</p>
-          <input type="text" name="name" required value="${person ? person.name : ''}">
+          <input type="text" name="name" required value="${
+            person ? person.name : ''
+          }">
           <p>Last name:</p>
-          <input type="text" name="last_name" required value="${person ? person.last_name: ''}">
+          <input type="text" name="last_name" required value="${
+            person ? person.last_name : ''
+          }">
           <p>OIB:</p>
-          <input type="text" name="oib" required value="${person ? person.oib : ''}"><br><br>
+          <input type="text" name="oib" required value="${
+            person ? person.oib : ''
+          }"><br><br>
           <input type="submit" value="Submit">
         </form>
-        `
-    }
-    async function initialize(){
-      const inEditMode = window.location.href.includes('/edit')
-      const wrapperElement = document.getElementById('form-wrap');
-      if (inEditMode) {
+        `;
+      }
+      async function initialize() {
+        const inEditMode = window.location.href.includes('/edit');
+        const wrapperElement = document.getElementById('form-wrap');
+        if (inEditMode) {
+          const id = window.location.href.split('/').reverse()[1];
+          const person = await (await fetch(`/api/people/${id}`)).json();
+          wrapperElement.innerHTML = renderForm(person);
+        } else {
+          wrapperElement.innerHTML = renderForm();
+        }
+      }
+      async function handleEdit(form) {
         const id = window.location.href.split('/').reverse()[1];
-        const person = await (await fetch(`/api/people/${id}`)).json();
-        wrapperElement.innerHTML = renderForm(person);
-      } else {
-        wrapperElement.innerHTML = renderForm();
+        const person = {
+          name: form.name.value,
+          last_name: form.last_name.value,
+          oib: form.oib.value,
+        };
+        await fetch(`/api/people/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(person),
+        });
+        window.location.href = '/';
       }
-    }
-    async function handleEdit(form){
-      const id = window.location.href.split('/').reverse()[1];
-      const person = {name:form.name.value, last_name:form.last_name.value, oib:form.oib.value};
-      await fetch(`/api/people/${id}`, {method: 'PUT', headers: { 'Content-Type': 'application/json'},
-        body:JSON.stringify(person)});
-      window.location.href = '/';
-    }
-    async function handleSubmit(form){
-      const person = {name:form.name.value, last_name:form.last_name.value, oib:form.oib.value};
-      await fetch(`/api/people`, {method: 'POST', headers: { 'Content-Type': 'application/json'},
-        body:JSON.stringify(person)});
-      window.location.href = '/';
-    }
+      async function handleSubmit(form) {
+        const person = {
+          name: form.name.value,
+          last_name: form.last_name.value,
+          oib: form.oib.value,
+        };
+        await fetch(`/api/people`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(person),
+        });
+        window.location.href = '/';
+      }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      initialize().catch(console.log);
-    })
-  </script>
-  <style>
+      document.addEventListener('DOMContentLoaded', () => {
+        initialize().catch(console.log);
+      });
+    </script>
+    <style>
       * {
-          box-sizing: border-box;
+        box-sizing: border-box;
       }
 
-      input[type=text], select, textarea {
-          width: 100%;
-          padding: 12px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          resize: vertical;
+      input[type='text'],
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
       }
 
       label {
-          padding: 12px 12px 12px 0;
-          display: inline-block;
+        padding: 12px 12px 12px 0;
+        display: inline-block;
       }
 
-      input[type=submit] {
-          background-color: #333;
-          color: white;
-          padding: 12px 20px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          float: right;
+      input[type='submit'] {
+        background-color: #333;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right;
       }
 
-      input[type=submit]:hover {
-          background-color: black;
+      input[type='submit']:hover {
+        background-color: black;
       }
 
       .container {
-          border-radius: 5px;
-          background-color: #f2f2f2;
-          padding: 20px;
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
       }
 
       .col-25 {
-          float: left;
-          width: 25%;
-          margin-top: 6px;
+        float: left;
+        width: 25%;
+        margin-top: 6px;
       }
 
       .col-75 {
-          float: left;
-          width: 75%;
-          margin-top: 6px;
+        float: left;
+        width: 75%;
+        margin-top: 6px;
       }
 
       /* Clear floats after the columns */
       .row:after {
-          content: "";
-          display: table;
-          clear: both;
+        content: '';
+        display: table;
+        clear: both;
       }
 
       /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
       @media screen and (max-width: 600px) {
-          .col-25, .col-75, input[type=submit] {
-              width: 100%;
-              margin-top: 0;
-          }
+        .col-25,
+        .col-75,
+        input[type='submit'] {
+          width: 100%;
+          margin-top: 0;
+        }
       }
-  </style>
-</head>
-<body>
-
-<h1>People form</h1>
-<div id="form-wrap">
-</div>
-<br>
-<a href="/people">See all the people in the DB.</a>
-</body>
+    </style>
+  </head>
+  <body>
+    <h1>People form</h1>
+    <div id="form-wrap"></div>
+    <br />
+    <a href="/people">See all the people in the DB </a>
+  </body>
 </html>

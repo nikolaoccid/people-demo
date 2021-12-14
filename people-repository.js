@@ -1,39 +1,44 @@
 const io = require('./json-io');
 
 class PeopleRepository {
-  getAll(){
+  getAll() {
     return io.readJSON('people.json');
   }
-  create(person){
+  create(person) {
     const people = io.readJSON('people.json');
     const id = people.slice(-1)[0].id + 1;
-    const newPerson = {id: id, name: person.name, last_name: person.last_name, oib: person.oib};
+    const newPerson = {
+      id: id,
+      name: person.name,
+      last_name: person.last_name,
+      oib: person.oib,
+    };
     people.push(newPerson);
     io.writeJSON('people.json', people);
     return newPerson;
   }
-  delete(id){
+  delete(id) {
     const parsedId = id;
     const people = io.readJSON('people.json');
-    const newPeople = people.filter(item => item.id !== parsedId);
+    const newPeople = people.filter((item) => item.id !== parsedId);
     io.writeJSON('people.json', newPeople);
   }
-  edit(newPerson){
+  edit(newPerson) {
     const id = newPerson.id;
     const name = newPerson.name;
     const lastName = newPerson.last_name;
     const oib = newPerson.oib;
     const people = io.readJSON('people.json');
-    const index = people.findIndex(person => person.id === id);
+    const index = people.findIndex((person) => person.id === id);
     people[index].name = name;
     people[index].last_name = lastName;
     people[index].oib = oib;
     io.writeJSON('people.json', people);
     return people[index];
   }
-  getById(id){
+  getById(id) {
     const people = io.readJSON('people.json');
-    return people.find(person => person.id === id);
+    return people.find((person) => person.id === id);
   }
 }
 exports.PeopleRepository = PeopleRepository;

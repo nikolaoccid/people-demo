@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>People app</title>
-  <meta name="description" content="Demo full stack application to showcase usage of full stack technologies"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="Nikola Occidentale">
-  <script>
-    async function renderTable() {
-      const loggedIn = isLoggedIn();
-      const peopleResponse = await fetch('/api/people', {method: 'GET'});
-      const people = await peopleResponse.json();
-      const rows = people.map(person => {
-        const id = person.id;
-        const name = person.name;
-        const lastName = person.last_name;
-        const oib = person.oib;
-        return `
+  <head>
+    <title>People app</title>
+    <meta
+      name="description"
+      content="Demo full stack application to showcase usage of full stack technologies"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Nikola Occidentale" />
+    <script>
+      async function renderTable() {
+        const loggedIn = isLoggedIn();
+        const peopleResponse = await fetch('/api/people', { method: 'GET' });
+        const people = await peopleResponse.json();
+        const rows = people.map((person) => {
+          const id = person.id;
+          const name = person.name;
+          const lastName = person.last_name;
+          const oib = person.oib;
+          return `
         <tr>
         <td>${name}</td>
         <td>${lastName}</td>
@@ -25,93 +28,96 @@
           <button class="action-button" onclick="handleEdit(${id});">Edit</button>
         </td>
         </tr>`;
-      })
-      const tableContent = rows.join('\n');
-      const peopleElement = document.getElementById('people-content');
-      peopleElement.innerHTML = tableContent;
-      if (loggedIn){
-        hideElements('login-section');
-      }else {
-        hideElements('action-button');
+        });
+        const tableContent = rows.join('\n');
+        const peopleElement = document.getElementById('people-content');
+        peopleElement.innerHTML = tableContent;
+        if (loggedIn) {
+          hideElements('login-section');
+        } else {
+          hideElements('action-button');
+        }
       }
-    }
-    function hideElements(className){
-      const elements = document.getElementsByClassName(className);
-      for (let element of elements) {
-        element.setAttribute('hidden', 'hidden');
+      function hideElements(className) {
+        const elements = document.getElementsByClassName(className);
+        for (let element of elements) {
+          element.setAttribute('hidden', 'hidden');
+        }
       }
-    }
-    async function handleDelete(id){
-      await fetch(`/api/people/${id}`, {method: 'DELETE'});
-      await renderTable();
-    }
-    function handleEdit(id){
-      window.location.href = `/people/${id}/edit`;
-    }
-    function isLoggedIn(){
-     if (localStorage.getItem('token')){
-       return true;
-     } else{
-       return false;
-     }
-    }
-    function logOut(){
-      localStorage.clear();
-      window.location.href='/';
-    }
-    renderTable().catch(console.log);
-  </script>
-  <style>
+      async function handleDelete(id) {
+        await fetch(`/api/people/${id}`, { method: 'DELETE' });
+        await renderTable();
+      }
+      function handleEdit(id) {
+        window.location.href = `/people/${id}/edit`;
+      }
+      function isLoggedIn() {
+        if (localStorage.getItem('token')) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      function logOut() {
+        localStorage.clear();
+        window.location.href = '/';
+      }
+      renderTable().catch(console.log);
+    </script>
+    <style>
       table {
-          width: 100%;
-          border-collapse: collapse;
+        width: 100%;
+        border-collapse: collapse;
       }
       /* Zebra striping */
       tr:nth-of-type(odd) {
-          background: #eee;
+        background: #eee;
       }
       th {
-          background: #333;
-          color: white;
-          font-weight: bold;
+        background: #333;
+        color: white;
+        font-weight: bold;
       }
-      td, th {
-          padding: 6px;
-          border: 1px solid #ccc;
-          text-align: left;
+      td,
+      th {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: left;
       }
       button {
-          padding: 4px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          resize: vertical;
-          width: 30%;
+        padding: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+        width: 30%;
       }
-      .table-action{
-          display: flex;
-          justify-content: center;
+      .table-action {
+        display: flex;
+        justify-content: center;
       }
-      #logout{
-          width: auto;
+      #logout {
+        width: auto;
       }
-  </style>
-</head>
-<body>
-
-<h2>People CRUD appliation</h2>
-<p class="login-section">To enable CRUD functionality please login in (username:janedoe, password:password123)</p>
-<a class="login-section" href="/login">Login</a>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Last name</th>
-    <th>OIB</th>
-    <th>Action</th>
-  </tr>
-  <tbody id="people-content"></tbody>
-</table><br>
-<a class="action-button" href="/people/new">Add new person</a><br>
-<button id="logout" class="action-button" onclick="logOut()">Logout</button>
-</body>
+    </style>
+  </head>
+  <body>
+    <h2>People CRUD appliation</h2>
+    <p class="login-section">
+      To enable CRUD functionality please login in (username:janedoe,
+      password:password123)
+    </p>
+    <a class="login-section" href="/login">Login</a>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Last name</th>
+        <th>OIB</th>
+        <th>Action</th>
+      </tr>
+      <tbody id="people-content"></tbody>
+    </table>
+    <br />
+    <a class="action-button" href="/people/new">Add new person</a><br />
+    <button id="logout" class="action-button" onclick="logOut()">Logout</button>
+  </body>
 </html>
-
