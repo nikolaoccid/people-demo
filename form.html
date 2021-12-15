@@ -24,7 +24,14 @@
           <p>OIB:</p>
           <input type="text" name="oib" required value="${
             person ? person.oib : ''
-          }"><br><br>
+          }">
+          <p>Username:</p>
+          <input type="text" name="username" required value="${
+            person ? person.username : ''
+          }">
+          <p>Password:</p>
+          <input type="password" name="password" ${person ? '' : 'required'}>
+          <br><br>
           <input type="submit" value="Submit">
         </form>
         `;
@@ -46,10 +53,15 @@
           name: form.name.value,
           last_name: form.last_name.value,
           oib: form.oib.value,
+          username: form.username.value,
+          password: form.password.value,
         };
         await fetch(`/api/people/${id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: localStorage.getItem('token'),
+          },
           body: JSON.stringify(person),
         });
         window.location.href = '/';
@@ -59,6 +71,8 @@
           name: form.name.value,
           last_name: form.last_name.value,
           oib: form.oib.value,
+          username: form.username.value,
+          password: form.password.value,
         };
         await fetch(`/api/people`, {
           method: 'POST',
@@ -79,7 +93,8 @@
 
       input[type='text'],
       select,
-      textarea {
+      textarea,
+      input[type='password'] {
         width: 100%;
         padding: 12px;
         border: 1px solid #ccc;
@@ -146,6 +161,6 @@
     <h1>People form</h1>
     <div id="form-wrap"></div>
     <br />
-    <a href="/people">See all the people in the DB </a>
+    <a href="/people">Back</a>
   </body>
 </html>

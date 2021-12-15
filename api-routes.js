@@ -5,13 +5,26 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const repo = new PeopleRepository();
 
+router.use(function (req, res, next) {
+  try {
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, 'majkabozjabistricka');
+    const user = repo.getById(decoded.user_id);
+    delete user.password;
+    req.user = user;
+  } catch {}
+  next();
+});
+
 //Get all people
 router.get('/people', (req, res) => {
   res.send(repo.getAll());
 });
 //Get person by ID
 router.get('/people/:id', (req, res) => {
-  res.send(repo.getById(parseInt(req.params.id)));
+  const person = repo.getById(parseInt(req.params.id));
+  delete person.password;
+  res.send(person);
 });
 //Add new person
 router.post('/people', (req, res) => {
@@ -19,23 +32,37 @@ router.post('/people', (req, res) => {
     name: req.body.name,
     last_name: req.body.last_name,
     oib: req.body.oib,
+    username: req.body.username,
+    password: req.body.password,
   };
   res.send(repo.create(person));
 });
 //Delete person
 router.delete('/people/:id', (req, res) => {
-  repo.delete(parseInt(req.params.id));
-  res.send();
+  if (req.user) {
+    repo.delete(parseInt(req.params.id));
+    res.send();
+  } else {
+    res.status(401);
+    res.send('Invalid request.');
+  }
 });
 //Edit person
 router.put('/people/:id', (req, res) => {
-  const person = {
-    id: parseInt(req.params.id),
-    name: req.body.name,
-    last_name: req.body.last_name,
-    oib: req.body.oib,
-  };
-  res.send(repo.edit(person));
+  if (req.user) {
+    const person = {
+      id: parseInt(req.params.id),
+      name: req.body.name,
+      last_name: req.body.last_name,
+      oib: req.body.oib,
+      username: req.body.username,
+      password: req.body.password,
+    };
+    res.send(repo.update(person));
+  } else {
+    res.status(401);
+    res.send('Invalid request');
+  }
 });
 router.post('/login', (req, res) => {
   const username = req.body.username;
@@ -52,13 +79,10 @@ router.post('/login', (req, res) => {
   }
 });
 router.get('/me', (req, res) => {
-  const token = req.headers.authorization;
-  try {
-    const decoded = jwt.verify(token, 'majkabozjabistricka');
-    const user = repo.getById(decoded.user_id);
-    delete user.password;
+  const { user } = req;
+  if (user) {
     res.send(user);
-  } catch {
+  } else {
     res.status(401);
     res.send({ error: 'Invalid token.' });
   }

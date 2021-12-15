@@ -49,7 +49,13 @@
         }
       }
       async function handleDelete(id) {
-        await fetch(`/api/people/${id}`, { method: 'DELETE' });
+        await fetch(`/api/people/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: localStorage.getItem('token'),
+          },
+        });
         await renderTable();
       }
       function handleEdit(id) {
@@ -111,10 +117,10 @@
     <h2>People CRUD appliation</h2>
     <div id="login-prompt">
       <p class="login-section">
-        To enable CRUD functionality please login in (username:janedoe,
-        password:password123)
+        To enable CRUD functionality please login or register.
       </p>
-      <a class="login-section" href="/login">Login</a>
+      <p><a class="login-section" href="/login">Login</a></p>
+      <p><a class="login-section" href="/people/new">Register</a></p>
     </div>
     <table>
       <tr>
@@ -126,7 +132,7 @@
       <tbody id="people-content"></tbody>
     </table>
     <br />
-    <a class="action-button" href="/people/new">Add new person</a><br />
+    <p><a class="action-button" href="/people/new">Add new person</a></p>
     <button id="logout" class="action-button" onclick="logOut()">Logout</button>
   </body>
 </html>

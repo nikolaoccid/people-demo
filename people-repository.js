@@ -6,12 +6,14 @@ class PeopleRepository {
   }
   create(person) {
     const people = io.readJSON('people.json');
-    const id = people.slice(-1)[0].id + 1;
+    let lastPerson = people.slice(-1)[0];
     const newPerson = {
-      id: id,
+      id: lastPerson ? lastPerson.id + 1 : 1,
       name: person.name,
       last_name: person.last_name,
       oib: person.oib,
+      username: person.username,
+      password: person.password,
     };
     people.push(newPerson);
     io.writeJSON('people.json', people);
@@ -23,16 +25,21 @@ class PeopleRepository {
     const newPeople = people.filter((item) => item.id !== parsedId);
     io.writeJSON('people.json', newPeople);
   }
-  edit(newPerson) {
+  update(newPerson) {
     const id = newPerson.id;
     const name = newPerson.name;
     const lastName = newPerson.last_name;
     const oib = newPerson.oib;
+    const username = newPerson.username;
     const people = io.readJSON('people.json');
     const index = people.findIndex((person) => person.id === id);
     people[index].name = name;
     people[index].last_name = lastName;
     people[index].oib = oib;
+    people[index].username = username;
+    if (newPerson.password) {
+      people[index].password = newPerson.password;
+    }
     io.writeJSON('people.json', people);
     return people[index];
   }
