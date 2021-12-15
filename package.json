@@ -8,7 +8,7 @@
     "start": "node index.js",
     "dev": "nodemon --exec \"npm run _dev\"",
     "lint": "prettier --write .",
-    "_dev": "prettier --check . && node index.js"
+    "_dev": "npm run lint && node index.js"
   },
   "author": "Nikola Occidentale",
   "license": "ISC",

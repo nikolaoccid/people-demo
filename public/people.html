@@ -36,6 +36,10 @@
           hideElements('login-section');
         } else {
           hideElements('action-button');
+          const rows = document.getElementsByClassName('table-action');
+          for (const row of rows) {
+            row.style.display = 'revert';
+          }
         }
       }
       function hideElements(className) {
@@ -98,15 +102,20 @@
       #logout {
         width: auto;
       }
+      #login-prompt {
+        margin-bottom: 1em;
+      }
     </style>
   </head>
   <body>
     <h2>People CRUD appliation</h2>
-    <p class="login-section">
-      To enable CRUD functionality please login in (username:janedoe,
-      password:password123)
-    </p>
-    <a class="login-section" href="/login">Login</a>
+    <div id="login-prompt">
+      <p class="login-section">
+        To enable CRUD functionality please login in (username:janedoe,
+        password:password123)
+      </p>
+      <a class="login-section" href="/login">Login</a>
+    </div>
     <table>
       <tr>
         <th>Name</th>
