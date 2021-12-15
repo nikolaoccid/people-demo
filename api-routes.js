@@ -1,6 +1,7 @@
 const express = require('express');
 const { PeopleRepository } = require('./people-repository');
 const jwt = require('jsonwebtoken');
+const jwtSecret = 'majkabozjabistricka';
 
 const router = express.Router();
 const repo = new PeopleRepository();
@@ -8,7 +9,7 @@ const repo = new PeopleRepository();
 router.use((req, res, next) => {
   try {
     const token = req.headers.authorization;
-    const decoded = jwt.verify(token, 'majkabozjabistricka');
+    const decoded = jwt.verify(token, jwtSecret);
     const user = repo.getById(decoded.user_id);
     delete user.password;
     req.user = user;
@@ -40,14 +41,7 @@ router.get('/people/:id', (req, res) => {
 });
 //Add new person
 router.post('/people', (req, res) => {
-  const person = {
-    name: req.body.name,
-    last_name: req.body.last_name,
-    oib: req.body.oib,
-    username: req.body.username,
-    password: req.body.password,
-  };
-  res.send(repo.create(person));
+  res.send(repo.create(req.body));
 });
 //Delete person
 router.delete('/people/:id', loggedIn, (req, res) => {
@@ -57,26 +51,21 @@ router.delete('/people/:id', loggedIn, (req, res) => {
 //Edit person
 router.put('/people/:id', loggedIn, (req, res) => {
   const person = {
+    ...req.body,
     id: parseInt(req.params.id),
-    name: req.body.name,
-    last_name: req.body.last_name,
-    oib: req.body.oib,
-    username: req.body.username,
-    password: req.body.password,
   };
   const newPerson = repo.update(person);
   delete newPerson.password;
   res.send(newPerson);
 });
 router.post('/login', (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password } = req.body;
   const people = repo.getAll();
   const person = people.find((user) => user.username === username);
   if (person?.password === password) {
     //correct login
     const token = { user_id: person.id };
-    res.send({ token: jwt.sign(token, 'majkabozjabistricka') });
+    res.send({ token: jwt.sign(token, jwtSecret) });
   } else {
     res.status(401);
     res.send({ error: 'Invalid username or password.' });
