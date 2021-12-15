@@ -18,7 +18,11 @@ router.use(function (req, res, next) {
 
 //Get all people
 router.get('/people', (req, res) => {
-  res.send(repo.getAll());
+  const people = repo.getAll();
+  for (const person of people) {
+    delete person.password;
+  }
+  res.send(people);
 });
 //Get person by ID
 router.get('/people/:id', (req, res) => {
