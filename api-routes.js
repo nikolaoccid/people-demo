@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const repo = new PeopleRepository();
 
-router.use(function (req, res, next) {
+router.use((req, res, next) => {
   try {
     const token = req.headers.authorization;
     const decoded = jwt.verify(token, 'majkabozjabistricka');
@@ -15,6 +15,14 @@ router.use(function (req, res, next) {
   } catch {}
   next();
 });
+function loggedIn(req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+    res.status(401);
+    res.send({ error: 'Not authorized.' });
+  }
+}
 
 //Get all people
 router.get('/people', (req, res) => {
@@ -42,31 +50,23 @@ router.post('/people', (req, res) => {
   res.send(repo.create(person));
 });
 //Delete person
-router.delete('/people/:id', (req, res) => {
-  if (req.user) {
-    repo.delete(parseInt(req.params.id));
-    res.send();
-  } else {
-    res.status(401);
-    res.send('Invalid request.');
-  }
+router.delete('/people/:id', loggedIn, (req, res) => {
+  repo.delete(parseInt(req.params.id));
+  res.send();
 });
 //Edit person
-router.put('/people/:id', (req, res) => {
-  if (req.user) {
-    const person = {
-      id: parseInt(req.params.id),
-      name: req.body.name,
-      last_name: req.body.last_name,
-      oib: req.body.oib,
-      username: req.body.username,
-      password: req.body.password,
-    };
-    res.send(repo.update(person));
-  } else {
-    res.status(401);
-    res.send('Invalid request');
-  }
+router.put('/people/:id', loggedIn, (req, res) => {
+  const person = {
+    id: parseInt(req.params.id),
+    name: req.body.name,
+    last_name: req.body.last_name,
+    oib: req.body.oib,
+    username: req.body.username,
+    password: req.body.password,
+  };
+  const newPerson = repo.update(person);
+  delete newPerson.password;
+  res.send(newPerson);
 });
 router.post('/login', (req, res) => {
   const username = req.body.username;
@@ -82,13 +82,8 @@ router.post('/login', (req, res) => {
     res.send({ error: 'Invalid username or password.' });
   }
 });
-router.get('/me', (req, res) => {
+router.get('/me', loggedIn, (req, res) => {
   const { user } = req;
-  if (user) {
-    res.send(user);
-  } else {
-    res.status(401);
-    res.send({ error: 'Invalid token.' });
-  }
+  res.send(user);
 });
 exports.router = router;
