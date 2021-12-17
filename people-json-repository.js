@@ -1,6 +1,6 @@
 const io = require('./json-io');
 
-class PeopleRepository {
+class PeopleJSONRepository {
   getAll() {
     return io.readJSON('people.json');
   }
@@ -48,4 +48,4 @@ class PeopleRepository {
     return people.find((person) => person.id === id);
   }
 }
-exports.PeopleRepository = PeopleRepository;
+exports.PeopleJSONRepository = PeopleJSONRepository;

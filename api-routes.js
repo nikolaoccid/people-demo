@@ -1,16 +1,18 @@
 const express = require('express');
-const { PeopleRepository } = require('./people-repository');
+const { PeopleJSONRepository } = require('./people-json-repository');
 const jwt = require('jsonwebtoken');
 const jwtSecret = 'majkabozjabistricka';
+const { PeopleDBRepository } = require('./people-db-repository');
+const { Router } = require('@awaitjs/express');
+const router = Router();
+const repo = new PeopleJSONRepository();
+const dbRepo = new PeopleDBRepository();
 
-const router = express.Router();
-const repo = new PeopleRepository();
-
-router.use((req, res, next) => {
+router.useAsync(async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     const decoded = jwt.verify(token, jwtSecret);
-    const user = repo.getById(decoded.user_id);
+    const user = await dbRepo.getById(decoded.user_id);
     delete user.password;
     req.user = user;
   } catch {}
@@ -26,22 +28,23 @@ function loggedIn(req, res, next) {
 }
 
 //Get all people
-router.get('/people', (req, res) => {
-  const people = repo.getAll();
+router.getAsync('/people', async (req, res) => {
+  const people = await dbRepo.getAll();
   for (const person of people) {
     delete person.password;
   }
   res.send(people);
 });
 //Get person by ID
-router.get('/people/:id', (req, res) => {
-  const person = repo.getById(parseInt(req.params.id));
+router.getAsync('/people/:id', async (req, res) => {
+  const person = await dbRepo.getById(parseInt(req.params.id));
   delete person.password;
   res.send(person);
 });
 //Add new person
-router.post('/people', (req, res) => {
-  res.send(repo.create(req.body));
+router.postAsync('/people', async (req, res) => {
+  const response = await dbRepo.create(req.body);
+  res.send(response);
 });
 //Delete person
 router.delete('/people/:id', loggedIn, (req, res) => {
@@ -49,18 +52,19 @@ router.delete('/people/:id', loggedIn, (req, res) => {
   res.send();
 });
 //Edit person
-router.put('/people/:id', loggedIn, (req, res) => {
+router.putAsync('/people/:id', loggedIn, async (req, res) => {
   const person = {
     ...req.body,
     id: parseInt(req.params.id),
   };
-  const newPerson = repo.update(person);
+  const newPerson = await dbRepo.update(person);
   delete newPerson.password;
   res.send(newPerson);
 });
-router.post('/login', (req, res) => {
+router.postAsync('/login', async (req, res) => {
   const { username, password } = req.body;
-  const people = repo.getAll();
+  const people = await dbRepo.getAll();
+  console.log('people', people);
   const person = people.find((user) => user.username === username);
   if (person?.password === password) {
     //correct login
