@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon --exec \"npm run _dev\"",
+    "start": "npm run migrate && node index.js",
+    "dev": "set DATABASE_URL=postgresql://user:1234@localhost:5402/people-demo&& nodemon --exec \"npm run _dev\"",
     "lint": "prettier --write .",
-    "_dev": "npm run lint && node index.js"
+    "_dev": "npm run lint && node index.js",
+    "migrate": "node migration1.js"
   },
   "author": "Nikola Occidentale",
   "license": "ISC",

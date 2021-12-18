@@ -1,11 +1,9 @@
 const { Client } = require('pg');
+const connectionString = process.env.DATABASE_URL;
 const client = new Client({
-  user: 'user',
-  host: 'localhost',
-  database: 'people-demo',
-  password: '1234',
-  port: 5402,
+  connectionString,
 });
+
 client.connect();
 
 class PeopleDBRepository {
@@ -48,7 +46,7 @@ class PeopleDBRepository {
   async delete(id) {
     const text = 'delete from people where id=$1';
     const values = [id];
-    const response = await client.query(text, values);
+    await client.query(text, values);
   }
 }
 exports.PeopleDBRepository = PeopleDBRepository;
