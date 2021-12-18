@@ -20,9 +20,8 @@ class PeopleJSONRepository {
     return newPerson;
   }
   delete(id) {
-    const parsedId = id;
     const people = io.readJSON('people.json');
-    const newPeople = people.filter((item) => item.id !== parsedId);
+    const newPeople = people.filter((item) => item.id !== id);
     io.writeJSON('people.json', newPeople);
   }
   update(newPerson) {

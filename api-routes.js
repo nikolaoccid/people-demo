@@ -1,11 +1,8 @@
-const express = require('express');
-const { PeopleJSONRepository } = require('./people-json-repository');
 const jwt = require('jsonwebtoken');
 const jwtSecret = 'majkabozjabistricka';
 const { PeopleDBRepository } = require('./people-db-repository');
 const { Router } = require('@awaitjs/express');
 const router = Router();
-const repo = new PeopleJSONRepository();
 const dbRepo = new PeopleDBRepository();
 
 router.useAsync(async (req, res, next) => {
@@ -47,8 +44,8 @@ router.postAsync('/people', async (req, res) => {
   res.send(response);
 });
 //Delete person
-router.delete('/people/:id', loggedIn, (req, res) => {
-  repo.delete(parseInt(req.params.id));
+router.deleteAsync('/people/:id', loggedIn, async (req, res) => {
+  await dbRepo.delete(parseInt(req.params.id));
   res.send();
 });
 //Edit person

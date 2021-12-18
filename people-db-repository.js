@@ -45,5 +45,10 @@ class PeopleDBRepository {
     const response = await client.query(text, values);
     return response.rows[0];
   }
+  async delete(id) {
+    const text = 'delete from people where id=$1';
+    const values = [id];
+    const response = await client.query(text, values);
+  }
 }
 exports.PeopleDBRepository = PeopleDBRepository;
